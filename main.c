@@ -3,18 +3,21 @@
 #include <windows.h>
 
 
-void TextBlue (){
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
-                            FOREGROUND_GREEN |
-                            FOREGROUND_BLUE);
-}
-void TextYELLOW (){
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
-                            FOREGROUND_RED|FOREGROUND_GREEN);
-}
-void TextRed (){
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
-                            FOREGROUND_RED);
+
+void SetColor (char chosenColor){
+    if ( chosenColor == 'b' || chosenColor == 'B'){
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
+                                FOREGROUND_GREEN |
+                                FOREGROUND_BLUE);
+    }
+    if ( chosenColor == 'r' || chosenColor == 'R'){
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
+                                FOREGROUND_RED);
+    }
+    if ( chosenColor == 'y' || chosenColor == 'Y'){
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
+                                FOREGROUND_RED|FOREGROUND_GREEN);
+    }
 }
 
 void makeDefaultStatusArray( int rows, int cols,char StatusArray[rows][cols]){
@@ -30,11 +33,11 @@ void drawMap (int rows,int cols,char StatusArray[rows][cols]){
 // Line 1 Alphabets
     printf("%c%c%c%c",sp, sp,sp,sp);
     for ( int a = 0 ; a < cols ; a++){
-        TextYELLOW();
+        SetColor('y');
         printf("%c%c%c%c%c%c%c%c", 65+a ,sp,sp,sp,sp,sp,sp,sp);
         fflush(stdout);
     }printf("\n");
-    TextBlue();
+    SetColor('b');
 //first row (3 lines) with no number
     for (int b = 0 ; b < rows ; b++) {
 
@@ -53,10 +56,10 @@ void drawMap (int rows,int cols,char StatusArray[rows][cols]){
         }printf("\n");
 
         //row 1 line 2 / 3
-        TextYELLOW();
+        SetColor('y');
         printf("%d", b);
         fflush(stdout);
-        TextBlue();
+        SetColor('B');
         fflush(stdout);
         for (int a = 0; a < cols; a++) {
             char ship=StatusArray[b][a];  //---------------------------------CHARACTER IS HERE
@@ -93,6 +96,6 @@ int main() {
     FirstArray[2][2]='K';
     drawMap(5,5,FirstArray);
 
-
+    getchar();
     return 0;
 }
