@@ -79,10 +79,6 @@ void drawMap (int rows,int cols,char StatusArray[rows][cols]){
         fflush(stdout);
     }printf("\n");
 
-
-
-
-
 }
 
 
