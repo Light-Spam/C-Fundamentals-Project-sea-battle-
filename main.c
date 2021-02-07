@@ -3,6 +3,9 @@
 #include <windows.h>
 #include "BaseMethods.h"
 #define MAX_SHIP_SIZE 10
+int newUserCounter = 1 ;
+char user1 [50];
+char user2 [50];
 
 typedef struct shipNode {
     // H = healthy    D = damaged    E = exploded
@@ -86,35 +89,152 @@ void banLocation(struct shipNode ship, char position, int row, int cols, char se
 }
 
 
+void setPlayer(char user[50]){
+
+    // Setting User 1
+    FILE* playerData;
+    char userName[50];
+    char tmp[50];
+    int counter = 1;
+    int input, userCounts=0;
 
 
+    printf("Choose     1) Play as Guest\n"
+           "           2) Choose account\n"
+           "           3) Create account\n");
+
+    scanf("%d", &input);
+    int accStatus = 1;
+    while (accStatus) {
+        if (input == 1) {
+            printf("Enter Your Guest Username : ");
+            scanf("%s", userName);
+            strcpy(user, userName);
+            accStatus = 0;
+            break;
+
+        }  if (input == 2) {
+            //open player data
+            playerData = fopen("C:\\FinalPro\\PlayerData.bin", "rb+");
+            if (playerData == NULL) {
+                printf("Can't open player data\n");
+                return;
+            }
+            printf("please pick an account by its number : \n");
+            //check for being empty
+            fread(&userCounts, sizeof(int), 1, playerData);
+//            printf("count of accounts is : %d", userCounts);
+//            fflush(stdout);
+            if (feof(playerData)) {
+                printf("No player data exists! \n");
+                input = 3;
+                continue;
+            }
+            // going to start of strings
+            fseek(playerData, 1 * sizeof(int), SEEK_SET);
+
+
+            while (fread(userName, sizeof(userName), 1, playerData) >= 1) {
+                printf("%d. %s\n", counter, userName);
+                counter++;
+            }
+            int prof;
+            scanf("%d", &prof);
+            for (int a = 1; a <= prof; a++) {
+                fread(userName, sizeof(userName), 1, playerData);
+            }
+            strcpy(user, userName);
+            printf("Done!\n");
+            break;
+
+        }
+        if (input == 3) {
+
+            printf("Please Enter new username to create an account (MAX 50 characters) :    ");
+            fflush(stdout);
+            scanf("%s", userName);
+            // going to end
+            fclose(playerData);
+            playerData = fopen("C:\\FinalPro\\PlayerData.bin", "rb+");
+            rewind(playerData);
+            fwrite(&newUserCounter,sizeof (int),1,playerData);
+            newUserCounter++;
+//            while (1) {
+//                if (fread(userName, sizeof(userName), 1, playerData) < 1) break;
+//            }
+            fseek(playerData,0, SEEK_END);
+            fwrite(userName,sizeof (userName),1,playerData);
+            printf("New account created!\n");
+            fflush(stdout);
+            input = 2;
+            fclose(playerData);
+            continue;
+
+        }
+    }
+    fclose(playerData);
+}
+
+
+void showMenu(){
+
+//    welcomeText();
+
+    // Base Menu :
+    printf("1. Roast some friends !\n\n"
+           "2. Play with an stupid Bot\n\n"
+           "3. Load my last mess\n\n"
+           "4. Load one of my saved messes\n\n"
+           "5. Setting\n\n"
+           "6. Show who is the Boss \n\n"
+           "7. Exit :( \n\n");
+
+
+    int input;
+    scanf("%d",&input);
+    system("clear");
+
+    // 1v1
+    if (input == 1){
+        printf("                                   So He Has Chosen Death !\n");
+        Sleep(1000);
+        setPlayer(user1);
+        setPlayer(user2);
+
+    }
+
+        // with bot
+    else if (input == 2){
+
+    }
+        // load last game
+    else if (input == 3){
+
+    }
+        // show saved games
+    else if (input == 4){
+
+    }
+        // setting
+    else if (input == 5){
+
+    }
+        // scoreboard
+    else if (input == 6){
+
+    }
+        // Exit
+    else if (input == 7){
+        return;
+    }
+
+}
 
 int main() {
 
-    char testSea[10][10];
+    showMenu();
 
-    makeDefaultStatusArray(10, 10, testSea);
-    drawMap(10, 10, testSea);
-
-
-    buildShip testShip;
-    testShip.x[0] = 0;
-    testShip.x[1] = 0;
-    testShip.x[2] = 0;
-    testShip.y[0] = 2;
-    testShip.y[1] = 3;
-    testShip.y[2] = 4;
-    testShip.pos = 'V';
-    testShip.size = 3;
-
-    testSea[0][2] = 's';
-    testSea[0][3] = 's';
-    testSea[0][4] = 's';
-    drawMap(10, 10, testSea);
-    banLocation(testShip, testShip.pos, 10, 10, testSea);
-    drawMap(10, 10, testSea);
-
-
+    printf("%s\n%s\n", user1,user2);
     getchar();
     return 0;
 }
