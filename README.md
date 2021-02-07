@@ -1,4 +1,17 @@
 # C-Fundamentals-Project-sea-battle-
 
 
-feat : Colors now can be chosen in a seprate method ( for later use in deploying theme)
+
+
+**REFACTORS :**
+
+- Now our base and most used methods are in a new header file.
+
+**FEATS :**
+
+
+**FIX :** 
+
+
+
+**NOTE :**
