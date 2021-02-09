@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/cygdrive/c/FinalPro/BaseMethods.h
+
+/cygdrive/c/FinalPro/ShipMethods.h
+
+/cygdrive/c/FinalPro/main.c
+stdio.h
+-
+stdlib.h
+-
+windows.h
+-
+BaseMethods.h
+/cygdrive/c/FinalPro/BaseMethods.h
+ShipMethods.h
+/cygdrive/c/FinalPro/ShipMethods.h
+time.h
+-
+

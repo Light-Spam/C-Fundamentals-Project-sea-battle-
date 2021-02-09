@@ -1,17 +1,32 @@
+#define MAX_SHIP_SIZE 10
+#define D 845
+//                    HERE ADD ALL NODES
+typedef struct playerProfileNode{
+    int num;
+    char username [50];
+    int coin;
+
+}acc ;
+typedef struct shipNode {
+    // H = healthy    D = damaged    E = exploded
+    char fullStatus;
+
+    // size of ship = 1*size
+    int size;
+
+    // H = Horizontal   V = Vertical
+    char pos;
 
 
-
-// makes the sea and set every block to "."
-void makeDefaultStatusArray(int rows, int cols, char sea[rows][cols]) {
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            sea[i][j] = '.';
-        }
-    }
-}
+    int x[MAX_SHIP_SIZE];
+    int y[MAX_SHIP_SIZE];
 
 
-
+    // Pointer to next ship structure
+    struct shipNode *pNextShip;
+} ship;
+//-------------------------------------------------------------------------------------------
+int warning = 0;
 // just changes font color.
 void setColor(char chosenColor) {
     if (chosenColor == 'b' || chosenColor == 'B') {
@@ -32,76 +47,140 @@ void setColor(char chosenColor) {
                                 FOREGROUND_RED | FOREGROUND_BLUE);
 
     }
+    if (chosenColor == 'n' || chosenColor == 'N') {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
+                                FOREGROUND_BLUE|FOREGROUND_GREEN|FOREGROUND_RED);
+
+    }
+    if (chosenColor == 'g' || chosenColor == 'G') {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
+                                FOREGROUND_GREEN );
+
+    }
 
 }
+#if D
+// player status
+void allPlayerStatusPrint (){
+    setColor('g');
+    acc playerProfile;
+    FILE* pData;
+    pData = fopen("GameData\\PlayerData.bin","rb");
+    rewind(pData);
 
+    while ( fread(&playerProfile, sizeof (playerProfile),1,pData) >= 1){
 
-
-//                       WARNING: this method works with both banLocation and ship structure.
-//                                if data's are not sync, this will fail.
-void drawMap(int rows, int cols, char sea[rows][cols]) {
-    char sp = ' ';
-
-// Line 1 Numbers
-    printf("%c%c%c%c", sp, sp, sp, sp);
-    for (int a = 0; a < cols; a++) {
-        setColor('y');
-        printf("%d%c%c%c%c%c%c%c", 0 + a, sp, sp, sp, sp, sp, sp, sp);
+        setColor('n');
         fflush(stdout);
     }
-    printf("\n");
-    setColor('p');
-//first row (3 lines) with no number
-    for (int b = 0; b < rows; b++) {
 
-
-        // Seprator Line after 3 lines in one row
-        for (int a = 0; a < cols; a++) {
-            printf(" -------");
-            fflush(stdout);
-        }
-        printf("\n");
-
-        //row 1 line 1 / 3
-        printf("|");
-        for (int a = 0; a < cols; a++) {
-            printf("%c%c%c%c%c%c%c|", sp, sp, sp, sp, sp, sp, sp);
-            fflush(stdout);
-        }
-        printf("\n");
-
-        //row 1 line 2 / 3
-        setColor('y');
-        printf("%d", b);
-        fflush(stdout);
-        setColor('p');
-        fflush(stdout);
-
-        for (int a = 0; a < cols; a++) {
-            setColor('b');
-            char ship = sea[a][b];  //---------------------------------CHARACTER IS HERE
-            printf("%c%c%c%c%c%c%c", sp, sp, sp, ship, sp, sp, sp);
-            fflush(stdout);
-            setColor('p');
-            printf("|");
-            fflush(stdout);
-            setColor('p');
-        }
-        printf("\n");
-        //row 1 line 3/3
-        printf("|");
-        for (int a = 0; a < cols; a++) {
-            printf("%c%c%c%c%c%c%c|", sp, sp, sp, sp, sp, sp, sp);
-            fflush(stdout);
-        }
-        printf("\n");
-    }
-    // Last line --- ( out of loop)
-    for (int a = 0; a < cols; a++) {
-        printf(" -------");
-        fflush(stdout);
-    }
-    printf("\n");
 
 }
+void onePlayerStatusPrint (acc* user){
+    setColor('g');
+    printf("Player name : %d. %s\n"
+           "Player coins : %d  \n"
+           "\n\n",
+           user->num, user->username,user->coin);
+    fflush(stdout);
+    setColor('n');
+}
+void listPrint(ship* head){
+    setColor('G');
+    ship* currShip = head;
+    int index = 1;
+    while(currShip != NULL){
+        printf("============================\n"
+               "Ship %d in the list\n"
+               "Size : %d\n"
+               " coords : \n",currShip->size,index);
 
+        for ( int a = 0 ; a < currShip->size ; a++){
+            printf("x[%d] = %d   ",a,currShip->x[a]);
+            printf("y[%d] = %d\n",a,currShip->y[a]);
+        }
+        printf("TotalStatus = %c\n"
+               "Position = %c\n",currShip->fullStatus, currShip->pos);
+
+
+        currShip = currShip->pNextShip;
+        index++;
+    }
+setColor('n');
+}
+#endif
+void welcomeText() {
+    setColor('y');
+    printf("\n\n\n\n\n\n\n");
+    printf("                                      ");
+    char wel[] = {"Welcome to the Game that makes No sense at all !\n"};
+    for (int i = 0; i < strlen(wel); i++) {
+        putchar(wel[i]);
+        fflush(stdout);
+
+        Sleep(60);
+    }
+    printf("\n\n");
+    printf("                                      ");
+    printf("Programed By : Light-Spam \n");
+    printf("                                      ");
+
+    printf("Winter 2020");
+    fflush(stdout);
+    Sleep(3000);
+    system("clear");
+    setColor('n');
+}
+
+void changeMapSize(){
+    int x, y;
+    printf("\nEnter your map width :    ");
+    scanf("%d", &x);
+    printf("\n");
+    printf("Enter your map length :    ");
+    scanf("%d", &y);
+    FILE* pMapSize = fopen("GameData\\mapSize.bin","wb");
+    if(pMapSize == NULL){
+        printf("\ncan't open mapSize.bin\n");
+    }
+    fwrite(&x,sizeof (int),1,pMapSize);
+    fwrite(&y,sizeof (int),1,pMapSize);
+    fclose(pMapSize);
+    printf("\n\nplease restart the Game to apply changes\n");
+    Sleep(4500);
+    warning = 1;
+    system("clear");
+}
+void changeShipSize(){
+
+    int size[10];
+
+    for ( int a = 0 ; a < 10 ; a++){
+        printf(" Enter count of 1 by %d ships :   \n", a+1);
+        scanf("%d", &size[a]);
+#if D
+        printf("                         Data size[%d] = %d\n", a, size[a] );
+        fflush(stdout);
+#endif
+    }
+
+    //==========================================================
+    FILE* t = fopen("GameData\\ShipSize.bin", "wb");
+    if ( t == NULL){
+        printf("can't open shipSize.bin\n");
+    }
+    for ( int a = 0 ; a < 10 ; a++){
+        int z = size[a];
+        fwrite(&z,sizeof(int),1,t);
+    }
+    fclose(t);
+    //====================================================
+
+    printf("\n\nship sizes has been successfully changed.\n"
+           "Restart the Game to apply changes\n\n\n");
+    fflush(stdout);
+    warning = 1;
+    Sleep(7000);
+    system("clear");
+
+};

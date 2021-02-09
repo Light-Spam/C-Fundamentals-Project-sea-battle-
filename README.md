@@ -5,16 +5,21 @@
 
 **REFACTORS :**
 
-- Now our base and most used methods are in a new header file.
+setColor method can now change back color to default
+
+setPlayer now return a structure of player account
+
 
 **FEATS :**
-Now we have the skull of the menu.
-players can choose name and create account
+
+- added a method to print the status of every account
+  
+- added welcome text method
 
 **FIX :**
 
-to fix : first name wont show up.
+every player has an account now with number and username.
 
 **NOTE :**
 
-Now I will try to make a base to play. -> failed
+
