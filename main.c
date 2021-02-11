@@ -5,10 +5,13 @@
 #include "BaseMethods.h"
 #include "ShipMethods.h"
 #include <time.h>
-#define D 845
+#define D 0
+#include "BattleMethods.h"
 
-
+// This func is here to avoid using pointer to pointer and keeping code more simple
 acc  setPlayer(){
+
+
 
     acc profile;
     acc tmp;
@@ -21,21 +24,14 @@ acc  setPlayer(){
     int input;
 
 
-    printf("Choose     1) Play as Guest\n"
-           "           2) Choose account\n"
-           "           3) Create account\n");
+    printf("Choose     \n"
+           "           1) Choose account\n"
+           "           2) Create account\n");
 
     scanf("%d", &input);
     int accStatus = 1;
     while (accStatus) {
-        if (input == 1) {
-            printf("Enter Your Guest Username : ");
-            scanf("%s", userName);
-            res = profile;
-            accStatus = 0;
-            break;
-
-        }  if (input == 2) {
+ if (input == 1) {
             //open player data
 
             playerData = fopen("GameData\\PlayerData.bin", "rb+");
@@ -51,13 +47,16 @@ acc  setPlayer(){
             if (ftell(playerData) == 0) {
                 printf("No player data exists! \n");
                 profile.num = 1;
-                input = 3;
+                input = 2;
                 continue;
             }
             rewind(playerData);
 
             while (fread(&profile, sizeof(profile), 1, playerData) >= 1) {
                 printf("%d. %s\n", profile.num, profile.username);
+                setColor('g');
+                printf("Score : %d\n\n", profile.coin);
+                setColor('n');
                 fflush(stdout);
             }
             rewind(playerData);
@@ -72,7 +71,7 @@ acc  setPlayer(){
             return res;
 
         }
-        if (input == 3) {
+        if (input == 2) {
             // making new prof
             printf("Please Enter new username to create an account (MAX 50 characters) :    ");
             fflush(stdout);
@@ -121,6 +120,7 @@ acc  setPlayer(){
             fflush(stdout);
             input = 2;
             fclose(playerData);
+            input = 1;
             continue;
 
         } else{
@@ -135,6 +135,7 @@ acc  setPlayer(){
 
 
 int main() {
+
 
     //getting map data's from file
     FILE* fp;
@@ -190,10 +191,10 @@ int main() {
     headShipUser2.pNextShip = NULL;
     headShipUser2.fullStatus = 'H';
     for( int a = 0 ; a < MAX_SHIP_SIZE ; a++){
-        headShipUser1.x[a] = -1;
-        headShipUser2.x[a] = -1;
-        headShipUser1.y[a] = -1;
-        headShipUser2.y[a] = -1;
+        headShipUser1.coordArray[a].x = -1;
+        headShipUser2.coordArray[a].x = -1;
+        headShipUser1.coordArray[a].y = -1;
+        headShipUser2.coordArray[a].y = -1;
     }
 
     ship* pHeadShipUser1 = &headShipUser1;
@@ -202,11 +203,12 @@ int main() {
     char user1sea[mapX][mapY];
     makeDefaultSeaArray(mapX,mapY,user1sea);
     char user2sea[mapX][mapY];
-    makeDefaultSeaArray(mapX,mapY,user1sea);
+    makeDefaultSeaArray(mapX,mapY,user2sea);
 
 //=====================================================================  MENU STARTS
 
     while (1) {
+        //115
 //   welcomeText();
         if ( warning == 1){
             setColor('r');
@@ -230,14 +232,12 @@ int main() {
 
         // 1v1
         if (input == 1) {
-            printf("                                        So He Has Chosen Death !\n");
-            Sleep(1000);
 
-            // check to not use same acc
 
             user1 = setPlayer();
             system("clear");
-            printf("Now pass the PC to your mate !\n\n\n\n");
+            setColor('y');
+            printf("\n\nNow pass the PC to your mate !\n\n\n\n");
             while (1){
                 user2 = setPlayer();
                 if (user1.num == user2.num){
@@ -251,18 +251,61 @@ int main() {
 #if D
             onePlayerStatusPrint(&user1);
             onePlayerStatusPrint(&user2);
+            getchar();
 #endif
+
+            system("clear");
             //user 1 stuff
             printf("\n\nLet's set our BattleShips!\n"
                    "\n1. Manual\n\n"
                    "2. Auto\n");
+            // getting input
             int n;
             scanf("%d", &n);
-            if (n == 1) {
-                printShipDataForUser(&user1,mapX,mapY,user1sea,defShipSize);
-                makeShipsList(&pHeadShipUser1,&user1,defShipSize);
 
+            // manually setting ships for :
+            if (n == 1) {
+
+                //-----------------------------------------------USER 1
+
+                // showing map
+                printShipDataForUser(&user1,mapX,mapY,user1sea,defShipSize);
+                //making linked list of ships for user 1
+                makeShipsList(&pHeadShipUser1,&user1,defShipSize);
+#if D
                 listPrint(pHeadShipUser1);
+#endif
+                makeSeaReady(pHeadShipUser1,mapX,mapY,user1sea);
+                system("clear");
+                printf("\n\n\n                           Commander %s's Base \n\n\n", user1.username);
+                drawOrgMap(mapY,mapY,user1sea);
+                //115 change to longer time
+                Sleep(2000);
+                system("clear");
+                setColor('n');
+                printf("\n\n\nYOU ARE ALL SET. now pass the computer to your buddy \n\n\n\n");
+                Sleep(2000);
+                //----------------------------------------------USER 2
+                // showing map
+                printShipDataForUser(&user2,mapX,mapY,user2sea,defShipSize);
+                //making linked list of ships for user 1
+                makeShipsList(&pHeadShipUser2,&user2,defShipSize);
+#if D
+                listPrint(pHeadShipUser2);
+#endif
+                makeSeaReady(pHeadShipUser2,mapX,mapY,user2sea);
+                system("clear");
+                printf("\n\n\n                           Commander %s's Base\n\n\n ", user2.username);
+                drawOrgMap(mapY,mapY,user2sea);
+                Sleep(2000);
+                system("clear");
+                //-------------------------------------------------------------USERS = DONE | BATLLE BEGINS
+
+                battleBase(mapX, mapY, user1sea, user2sea, pHeadShipUser1,pHeadShipUser2, &user1,&user2);
+
+                break;
+                printf("\n\n\n@@@@@@@@@@@@@@@@ END @@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n");
+
             }
 
             if (n == 2) {
@@ -308,7 +351,8 @@ int main() {
         }
             // scoreboard
         else if (input == 6) {
-
+printScoreBoard();
+fflush(stdout);
         }
             // Exit
         else if (input == 7) {

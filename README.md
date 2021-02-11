@@ -3,35 +3,69 @@
 
 **NOTE :**
 
+---------------------------------------WHAT IS DONE:
+- player profiles is completed
+  
+- battle is on going but need to be tested more with more ships in game
 
-so far we have :
-1. our menu Base
-2. player profile (create or choose)
-3. a method to make the ships link list
+-score board is done
+
+----------------------------------------REMAINING 
+
+- bot player
+
+- auto map sort
+
+- designs
+
+- checking connection between map and ship counts
+
+- test the battle with more ships and different map size
+
 
 
 ======================================================================================
                                    **REFACTORS :**
 
-
-a lot
-not IMP
+- every node of linked list now contains user profile's node address (also in printing the list we can see the owner)
 
 ======================================================================================
                                      **FEATS :**
 
 
-BASE METHODS: 
+-----------------------------------BATTLE ADDED :
 
-- allPlayerStatusPrint
-- onePlayerStatusPrint
-- listPrint
-- changeMapSize
-- changeShipSize
+- delShip
 
-SHIP METHODS:
+- checkFullTermination
+
+-shoot
+
+-battleBase
+
+----------------------------------BASE METHODS: 
+
+- makeRandomNumber
+
+-printScoreBoard
+
+-saveScoresInFile
+
+-coinCalc
+
+
+-----------------------------------SHIP METHODS:
 - printShipDataForUser
+  
 - makeShipsList
+
+-drawOrgMap
+
+-drawBattleMap
+
+-showAroundOfTerminatedShip
+
+-makeSeaReady
 
 
 ======================================================================================

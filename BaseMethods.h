@@ -1,6 +1,11 @@
 #define MAX_SHIP_SIZE 10
-#define D 845
+#define D 0
+#include <time.h>
 //                    HERE ADD ALL NODES
+typedef struct coordNode {
+    int x;
+    int y;
+}coord;
 typedef struct playerProfileNode{
     int num;
     char username [50];
@@ -17,10 +22,10 @@ typedef struct shipNode {
     // H = Horizontal   V = Vertical
     char pos;
 
-
-    int x[MAX_SHIP_SIZE];
-    int y[MAX_SHIP_SIZE];
-
+    // address of User who owns this list
+    acc * owner;
+    // array of coords
+    coord coordArray[MAX_SHIP_SIZE];
 
     // Pointer to next ship structure
     struct shipNode *pNextShip;
@@ -33,33 +38,39 @@ void setColor(char chosenColor) {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
                                 FOREGROUND_GREEN |
                                 FOREGROUND_BLUE);
+        fflush(stdout);
     }
     if (chosenColor == 'r' || chosenColor == 'R') {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
                                 FOREGROUND_RED);
+        fflush(stdout);
     }
     if (chosenColor == 'y' || chosenColor == 'Y') {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
                                 FOREGROUND_RED | FOREGROUND_GREEN);
+        fflush(stdout);
     }
     if (chosenColor == 'p' || chosenColor == 'P') {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
                                 FOREGROUND_RED | FOREGROUND_BLUE);
+        fflush(stdout);
 
     }
     if (chosenColor == 'n' || chosenColor == 'N') {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
                                 FOREGROUND_BLUE|FOREGROUND_GREEN|FOREGROUND_RED);
+        fflush(stdout);
 
     }
     if (chosenColor == 'g' || chosenColor == 'G') {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
                                 FOREGROUND_GREEN );
+        fflush(stdout);
 
     }
 
 }
-#if D
+
 // player status
 void allPlayerStatusPrint (){
     setColor('g');
@@ -89,15 +100,16 @@ void listPrint(ship* head){
     setColor('G');
     ship* currShip = head;
     int index = 1;
+    printf("\n\n\n\n     #### LIST OWNER : %s\n\n", currShip->owner->username);
+
     while(currShip != NULL){
-        printf("============================\n"
+        printf("____________________________________\n"
                "Ship %d in the list\n"
                "Size : %d\n"
-               " coords : \n",currShip->size,index);
+               " coords : \n",index, currShip->size);
 
         for ( int a = 0 ; a < currShip->size ; a++){
-            printf("x[%d] = %d   ",a,currShip->x[a]);
-            printf("y[%d] = %d\n",a,currShip->y[a]);
+            printf("( %d , %d )\n" ,currShip->coordArray[a].x,currShip->coordArray[a].y);
         }
         printf("TotalStatus = %c\n"
                "Position = %c\n",currShip->fullStatus, currShip->pos);
@@ -108,7 +120,7 @@ void listPrint(ship* head){
     }
     setColor('n');
 }
-#endif
+
 void welcomeText() {
     setColor('y');
     printf("\n\n\n\n\n\n\n");
@@ -159,8 +171,10 @@ void changeShipSize(){
         printf(" Enter count of 1 by %d ships :   \n", a+1);
         scanf("%d", &size[a]);
 #if D
+        setColor('g');
         printf("                         Data size[%d] = %d\n", a, size[a] );
         fflush(stdout);
+        setColor('n');
 #endif
     }
 
@@ -184,3 +198,167 @@ void changeShipSize(){
     system("clear");
 
 };
+
+int makeRandomNumber( int en, int st){
+    time_t t = time(NULL);
+    srand(t);
+    int res = (rand()%(st - en +1 )) + en;
+    return res;
+}
+
+
+void setCoordForShip(coord firstIn, coord secIn, ship* pShip){
+    // setting nose and tail
+    // should be in order to work
+
+    // for boats
+if( pShip->size == 1){
+    pShip->coordArray[0].x = firstIn.x;
+    pShip->coordArray[0].y = firstIn.y;
+    return;
+}
+
+
+
+if ( pShip->pos == 'H') {
+
+    pShip->coordArray[0].y = firstIn.y; //sabet
+    pShip->coordArray[pShip->size-1].y = firstIn.y;
+
+            if(firstIn.x < secIn.x){
+                pShip->coordArray[0].x = firstIn.x;
+                pShip->coordArray[pShip->size-1].x = secIn.x;
+            }else{
+                pShip->coordArray[0].x = secIn.x;
+                pShip->coordArray[pShip->size-1].x =firstIn.x;
+            }
+}
+if(pShip->pos == 'V') {
+
+    pShip->coordArray[0].x = firstIn.x; //sabet
+    pShip->coordArray[pShip->size-1].x = firstIn.x; //sabet
+
+    if(firstIn.y < secIn.y){
+        pShip->coordArray[0].y = firstIn.y;
+        pShip->coordArray[pShip->size-1].y = secIn.y;
+    }else{
+        pShip->coordArray[0].y = secIn.y;
+        pShip->coordArray[pShip->size-1].y =firstIn.y;
+    }
+}
+    // end the function if size of ship is 2
+    if ( pShip->size == 2) return;
+
+    if(pShip->pos == 'H') {
+        for (int a = 1; a < pShip->size - 1; a++) {
+            pShip->coordArray[a].x = pShip->coordArray[0].x + a;
+            pShip->coordArray[a].y = pShip->coordArray[0].y;
+        }
+        return;
+    }
+    if (pShip->pos == 'V'){
+
+            for ( int a = 1 ; a < pShip->size-1 ; a++){
+                pShip->coordArray[a].y = pShip->coordArray[0].y + a;
+                pShip->coordArray[a].x = pShip->coordArray[0].x;
+    }
+        return;
+
+    }
+
+}
+
+
+
+
+void arrCpr2D(int x, int y, char dst_arr[x][y], char src_arr[x][y]){
+    for ( int a = 0 ; a <  x ; a++){
+        for ( int b = 0 ; b < y ; b++){
+            dst_arr[a][b] = src_arr[a][b];
+        }
+    }
+}
+
+
+int coinCalc( int desSize){
+    int shipSizeArr[MAX_SHIP_SIZE];
+    int max=0;
+    FILE* fShipSize;
+    fShipSize = fopen("GameData\\ShipSize.bin","rb");
+    if ( fShipSize == NULL){
+        printf("Can't Open ShipSize.bin\n");
+    }
+    for ( int a = 0 ; a < MAX_SHIP_SIZE ; a++){
+        int z;
+        fread(&z,sizeof(int),1,fShipSize);
+        shipSizeArr[a] = z;
+    }
+    fclose(fShipSize);
+    for ( int b = 0 ; b < MAX_SHIP_SIZE ; b++){
+      if(shipSizeArr[b] > max){
+          max = shipSizeArr[b];
+      }
+    }
+    int res = (5 * max) / desSize;
+    return res;
+}
+
+void saveScoresInFile(acc user){
+FILE* fp;
+acc curr;
+fp = fopen("GameData\\PlayerData.bin", "rb+");
+
+    while (fread(&curr, sizeof (acc), 1 , fp) >= 1){
+    if( curr.num == user.num){
+        fseek(fp, -1 * sizeof (acc), SEEK_CUR);
+        fwrite(&user, sizeof (acc),1,fp);
+    }
+}
+
+
+}
+
+
+void printScoreBoard(){
+
+    FILE* fp;
+    acc prof;
+    //getting last saved profile num
+    fp = fopen("GameData\\PlayerData.bin", "rb");
+    fseek(fp,-1*(sizeof(acc)),SEEK_END);
+    fread(&prof, sizeof(acc),1,fp);
+    //making the array
+    acc profArr[prof.num];
+    rewind(fp);
+    for(int a = 0 ; a < prof.num ; a++){
+        fread(&profArr[a], sizeof(acc), 1 , fp);
+    }
+    //now we got the array of all accounts
+    acc tmp;
+    for( int a = 0 ; a < prof.num ; a++){
+        for ( int b = 0 ; b < prof.num ; b++){
+            if( profArr[a].coin > profArr[b].coin){
+                tmp = profArr[a];
+                profArr[a] =profArr[b];
+                profArr[b] = tmp;
+
+            }
+
+
+        }
+    }
+    setColor('y');
+    printf("\n\n\n%s is the Boss with score of %d\n\n\n", profArr[0].username,profArr[0].coin);
+    setColor('n');
+for ( int a = 0 ; a < prof.num ; a++){
+
+    printf("%d.%s  ..............................  %d\n\n", a+1, profArr[a].username, profArr[a].coin);
+}
+    printf("Press any key to continue . . . \n\n");
+fflush(stdout);
+int t;
+scanf("%d", &t);
+system("clear");
+}
+
+
