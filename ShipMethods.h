@@ -62,13 +62,13 @@ void drawCusMap(int rows, int cols, char sea[rows][cols]) {
         fflush(stdout);
 
         int k = 0;
-        for (int a = 0; a < cols ; a++) {
+        for (int a = 0; a < cols; a++) {
             setColor('b');
             char ship = sea[a][b];  //---------------------------------CHARACTER IS HERE
             printf("%c%c%c%c%c%c%c", sp, sp, sp, ship, sp, sp, sp);
             fflush(stdout);
             setColor('p');
-            if (k < cols -1) {
+            if (k < cols - 1) {
                 printf("|");
                 fflush(stdout);
                 k++;
@@ -119,6 +119,7 @@ void drawCusMap(int rows, int cols, char sea[rows][cols]) {
     setColor('n');
 
 }
+
 // don't print bans
 void drawOrgMap(int rows, int cols, char sea[rows][cols]) {
     char sp = ' ';
@@ -170,14 +171,14 @@ void drawOrgMap(int rows, int cols, char sea[rows][cols]) {
         fflush(stdout);
 
         int k = 0;
-        for (int a = 0; a < cols ; a++) {
+        for (int a = 0; a < cols; a++) {
             setColor('b');
             char ship = sea[a][b];  //---------------------------------CHARACTER IS HERE
             if (ship == '`') ship = ' ';
             printf("%c%c%c%c%c%c%c", sp, sp, sp, ship, sp, sp, sp);
             fflush(stdout);
             setColor('p');
-            if (k < cols -1) {
+            if (k < cols - 1) {
                 printf("|");
                 fflush(stdout);
                 k++;
@@ -228,6 +229,7 @@ void drawOrgMap(int rows, int cols, char sea[rows][cols]) {
     setColor('n');
 
 }
+
 // for battle
 void drawBattleMap(int rows, int cols, char sea[rows][cols]) {
     char sp = ' ';
@@ -279,12 +281,12 @@ void drawBattleMap(int rows, int cols, char sea[rows][cols]) {
         fflush(stdout);
 
         int k = 0;
-        for (int a = 0; a < cols ; a++) {
+        for (int a = 0; a < cols; a++) {
             setColor('b');
             char ship = sea[a][b];  //---------------------------------CHARACTER IS HERE
             if (ship == '`') ship = ' ';
-            if (ship>= '1' && ship<='9') ship = ' ';
-            if( ship == 'X'){
+            if (ship >= '1' && ship <= '9') ship = ' ';
+            if (ship == 'X') {
                 setColor('r');
                 fflush(stdout);
                 printf("%c%c%c%c%c%c%c", sp, sp, sp, ship, sp, sp, sp);
@@ -292,26 +294,26 @@ void drawBattleMap(int rows, int cols, char sea[rows][cols]) {
                 setColor('n');
                 fflush(stdout);
             }
-            if( ship == 'W'){
-                    setColor('b');
-                    fflush(stdout);
-                    printf("%c%c%c%c%c%c%c", sp, sp, sp, ship, sp, sp, sp);
-                    fflush(stdout);
+            if (ship == 'W') {
+                setColor('b');
+                fflush(stdout);
+                printf("%c%c%c%c%c%c%c", sp, sp, sp, ship, sp, sp, sp);
+                fflush(stdout);
                 setColor('n');
                 fflush(stdout);
             }
-            if( ship == '#'){
+            if (ship == '#') {
                 setColor('n');
                 fflush(stdout);
                 printf("%c%c%c%c%c%c%c", sp, sp, sp, ship, sp, sp, sp);
                 fflush(stdout);
             }
-            if( ship != '#' && ship != 'W' && ship != 'X') {
+            if (ship != '#' && ship != 'W' && ship != 'X') {
                 printf("%c%c%c%c%c%c%c", sp, sp, sp, ship, sp, sp, sp);
                 fflush(stdout);
             }
             setColor('p');
-            if (k < cols -1) {
+            if (k < cols - 1) {
                 printf("|");
                 fflush(stdout);
                 k++;
@@ -362,6 +364,7 @@ void drawBattleMap(int rows, int cols, char sea[rows][cols]) {
     setColor('n');
 
 }
+
 //bans the area around the ship
 //WARNING: pos of ships should be set correctly
 int banOnSea(ship *ship, int mapX, int mapY, char sea[mapX][mapY]) {
@@ -413,6 +416,7 @@ int banOnSea(ship *ship, int mapX, int mapY, char sea[mapX][mapY]) {
 
     return 1;
 }
+
 int showAroundOfTerminatedShip(ship *ship, int mapX, int mapY, char sea[mapX][mapY]) {
     // banning 8 side of every part if it's ' ' or '`'
     int x, y;
@@ -531,7 +535,7 @@ void printShipDataForUser(acc *user, int mapX, int mapY, char userSea[mapX][mapY
 
     printf("\n\n\nThis is your Territory, You have to defend it with your honor!\n\n\n");
     drawCusMap(mapX, mapY, userSea);
-    printf("\n\n\nWe have limited recourses commander %s , but our captains do believe in you !\n"
+    printf("\n\n\nWe have limited resources commander %s , but our captains do believe in you !\n"
            "Now is the time to set the position of our Army!\n ", user->username);
 
     //printing ships data
@@ -590,7 +594,7 @@ ship *makeShipsList(ship **listHead, acc *user, int const shipSizeArr[10]) {
 }
 
 void makeSeaReady(ship *pHead, int mapX, int mapY, char seaOrigin[mapX][mapY]) {
-    ship* saveHead = pHead;
+    ship *saveHead = pHead;
     char backupSea[mapX][mapY];
     // for reset
     char backupSeaScratch[mapX][mapY];
@@ -637,64 +641,64 @@ void makeSeaReady(ship *pHead, int mapX, int mapY, char seaOrigin[mapX][mapY]) {
                 fflush(stdout);
                 scanf("%d %d", &firstInCoord.x, &firstInCoord.y);
                 fflush(stdout);
-                if( firstInCoord.x == 911) break;
+                if (firstInCoord.x == 911) break;
                 fflush(stdout);
 
 
-                    pCurr->pos = '/';
-                    secondInCoord.x = -1;
-                    secondInCoord.y = -1;
-                    // checking input length
-                    //...
-                    // giving the data to ship node
-                    setCoordForShip(firstInCoord, secondInCoord, pCurr);
+                pCurr->pos = '/';
+                secondInCoord.x = -1;
+                secondInCoord.y = -1;
+                // checking input length
+                //...
+                // giving the data to ship node
+                setCoordForShip(firstInCoord, secondInCoord, pCurr);
 
-                    // backing up sea in case of an error
-                    arrCpr2D(mapX, mapY, backupSea, seaOrigin);
-                    //setting ship locations on map
-                    int res1 = setShipOnSea(pCurr, mapX, mapY, seaOrigin);
+                // backing up sea in case of an error
+                arrCpr2D(mapX, mapY, backupSea, seaOrigin);
+                //setting ship locations on map
+                int res1 = setShipOnSea(pCurr, mapX, mapY, seaOrigin);
 
 #if D                 // printing the sea baning changes
-                    for(int a = 0 ; a < mapX ; a++){
-                        for ( int b = 0 ; b < mapY ; b++){
-                            printf("seaOrigin[%d][%d] = %c\n", a,b,seaOrigin[a][b]);
-                        }
+                for (int a = 0; a < mapX; a++) {
+                    for (int b = 0; b < mapY; b++) {
+                        printf("seaOrigin[%d][%d] = %c\n", a, b, seaOrigin[a][b]);
                     }
+                }
 #endif
-                    // baning locations on map
-                    int res2 = banOnSea(pCurr, mapX, mapY, seaOrigin);
-                    //if a location for setting ship not be ' '  ||  if a location to ban is 's'  ---> return zero
-                    if (res1 == 0 || res2 == 0) {
-                        int v = makeRandomNumber(1, 10);
-                        setColor('y');
-                        if (v < 3) {
-                            printf("\n I warned you Master, spread the army or we will fail at war!\n"
-                                   "Try again ...\n");
-                        }
-                        if (v >= 3 && v <= 6) {
-                            printf("\n NOT TO CLOSE ! this isn't a child game! sorry sir but I\n"
-                                   "have to cancel this order...\n"
-                                   "Try again ...\n");
-                        }
-                        if (v > 6 && v <= 9) {
-                            printf("\n NO I WONT sent my men like cowards! please spread that army master !!!\n"
-                                   "More , More \n"
-                                   "again ...\n");
-                        }
-                        if (v > 8) {
-                            printf("\n Sir, I'm not in the place to interference in your commands but\n"
-                                   "isn't that too close ? please Try again ...\n");
-
-                        }
-                        //setting seaOrigin back
-                        arrCpr2D(mapX, mapY, seaOrigin, backupSea);
-                        continue;
+                // baning locations on map
+                int res2 = banOnSea(pCurr, mapX, mapY, seaOrigin);
+                //if a location for setting ship not be ' '  ||  if a location to ban is 's'  ---> return zero
+                if (res1 == 0 || res2 == 0) {
+                    int v = makeRandomNumber(1, 10);
+                    setColor('y');
+                    if (v < 3) {
+                        printf("\n I warned you Master, spread the army or we will fail at war!\n"
+                               "Try again ...\n");
                     }
+                    if (v >= 3 && v <= 6) {
+                        printf("\n NOT TO CLOSE ! this isn't a child game! sorry sir but I\n"
+                               "have to cancel this order...\n"
+                               "Try again ...\n");
+                    }
+                    if (v > 6 && v <= 9) {
+                        printf("\n NO I WONT sent my men like cowards! please spread that army master !!!\n"
+                               "More , More \n"
+                               "again ...\n");
+                    }
+                    if (v > 8) {
+                        printf("\n Sir, I'm not in the place to interference in your commands but\n"
+                               "isn't that too close ? please Try again ...\n");
+
+                    }
+                    //setting seaOrigin back
+                    arrCpr2D(mapX, mapY, seaOrigin, backupSea);
+                    continue;
+                }
 
                 break;
-                }
+            }
             //reset
-            if(firstInCoord.x == 911) {
+            if (firstInCoord.x == 911) {
                 pCurr = saveHead;
                 arrCpr2D(mapX, mapY, seaOrigin, backupSeaScratch);
 
@@ -739,7 +743,7 @@ void makeSeaReady(ship *pHead, int mapX, int mapY, char seaOrigin[mapX][mapY]) {
             scanf("%d %d", &firstInCoord.x, &firstInCoord.y);
             fflush(stdout);
             //reset
-            if( firstInCoord.x == 911) break;
+            if (firstInCoord.x == 911) break;
 
             fflush(stdout);
             printf("\nsetting the tail at :      ");
@@ -782,9 +786,9 @@ void makeSeaReady(ship *pHead, int mapX, int mapY, char seaOrigin[mapX][mapY]) {
                 //setting ship locations on map
                 int res1 = setShipOnSea(pCurr, mapX, mapY, seaOrigin);
 #if D
-                for(int a = 0 ; a < mapX ; a++){
-                    for ( int b = 0 ; b < mapY ; b++){
-                        printf("seaOrigin[%d][%d] = %c\n", a,b,seaOrigin[a][b]);
+                for (int a = 0; a < mapX; a++) {
+                    for (int b = 0; b < mapY; b++) {
+                        printf("seaOrigin[%d][%d] = %c\n", a, b, seaOrigin[a][b]);
                     }
                 }
 #endif
@@ -854,9 +858,9 @@ void makeSeaReady(ship *pHead, int mapX, int mapY, char seaOrigin[mapX][mapY]) {
                 //setting ship locations on map
                 int res1 = setShipOnSea(pCurr, mapX, mapY, seaOrigin);
 #if D
-                for(int a = 0 ; a < mapX ; a++){
-                    for ( int b = 0 ; b < mapY ; b++){
-                        printf("seaOrigin[%d][%d] = %c\n", a,b,seaOrigin[a][b]);
+                for (int a = 0; a < mapX; a++) {
+                    for (int b = 0; b < mapY; b++) {
+                        printf("seaOrigin[%d][%d] = %c\n", a, b, seaOrigin[a][b]);
                     }
                 }
 #endif
@@ -902,9 +906,9 @@ void makeSeaReady(ship *pHead, int mapX, int mapY, char seaOrigin[mapX][mapY]) {
 
             break;
         }
-        if(firstInCoord.x == 911){
+        if (firstInCoord.x == 911) {
             pCurr = saveHead;
-            arrCpr2D(mapX,mapY,seaOrigin,backupSeaScratch);
+            arrCpr2D(mapX, mapY, seaOrigin, backupSeaScratch);
 
             setColor('r');
             printf("\n\n\n\n                  Falling troops back ...                   \n\n\n\n");
@@ -923,4 +927,119 @@ void makeSeaReady(ship *pHead, int mapX, int mapY, char seaOrigin[mapX][mapY]) {
     }//end while list move
 
 
+}
+
+coord2 findSpace(int mapX, int mapY, char seaOrigin[mapX][mapY], int sizeOfShip) {
+
+    Sleep(400);
+    coord2 res;
+    int t = makeRandomNumber(1, 2);
+
+    int blockCounter = 0;
+//moving H
+    while (1) {
+
+        if (t==1) {
+            int a = makeRandomNumber(0, mapY);
+            for (a; a < mapX; a++) {
+                blockCounter = 0;
+                for (int b = 0; b < mapY; b++) {
+                    if (seaOrigin[a][b] != ' ') blockCounter = 0;
+
+                    if (seaOrigin[a][b] == ' ') {
+                        blockCounter++;
+
+                        if (blockCounter == sizeOfShip) {
+                            res.xE = a;
+                            res.yE = b;
+                            res.xS = a;
+                            res.yS = b - sizeOfShip + 1;
+                            return res;
+
+                        }
+
+                    }
+
+
+                }
+
+
+            }
+        } else {
+            //moving V
+            int a = makeRandomNumber(0, mapY);
+
+            for (a; a < mapX; a++) {
+
+                blockCounter = 0;
+
+                for (int b = 0; b < mapY; b++) {
+
+                    if (seaOrigin[b][a] != ' ') blockCounter = 0;
+
+                    if (seaOrigin[b][a] == ' ') {
+                        blockCounter++;
+
+                        if (blockCounter == sizeOfShip) {
+                            res.xE = b;
+                            res.yE = a;
+                            res.xS = b - sizeOfShip +1;
+                            res.yS = a;
+                            return res;
+
+                        }
+
+                    }
+
+
+                }
+
+
+            }
+
+
+        }
+    }
+}
+
+void autoShipSet(int mapX, int mapY, char seaOrigin[mapX][mapY], ship *pHead) {
+
+
+    ship *pCurr = pHead;
+    coord firstInCoord;
+    coord secondInCoord;
+    coord2 res;
+
+    while (pCurr->pNextShip != NULL) {
+
+        res = findSpace(mapX, mapY, seaOrigin, pCurr->size);
+        firstInCoord.x = res.xS;
+        firstInCoord.y = res.yS;
+        secondInCoord.x = res.xE;
+        secondInCoord.y = res.yE;
+
+        if (firstInCoord.x == secondInCoord.x) {
+            pCurr->pos = 'V';
+
+            setCoordForShip(firstInCoord, secondInCoord, pCurr);
+
+            setShipOnSea(pCurr, mapX, mapY, seaOrigin);
+
+            banOnSea(pCurr, mapX, mapY, seaOrigin);
+        }
+        if (firstInCoord.y == secondInCoord.y) {
+            pCurr->pos = 'H';
+
+            setCoordForShip(firstInCoord, secondInCoord, pCurr);
+
+            setShipOnSea(pCurr, mapX, mapY, seaOrigin);
+
+            banOnSea(pCurr, mapX, mapY, seaOrigin);
+
+        }
+        drawCusMap(mapX, mapY, seaOrigin);
+        fflush(stdout);
+
+        pCurr = pCurr->pNextShip;
+    }
 }

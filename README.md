@@ -1,16 +1,16 @@
 # C-Fundamentals-Project-sea-battle-
 
-
 **NOTE :**
 
 ---------------------------------------WHAT IS DONE:
+
 - player profiles is completed
-  
+
 - battle is on going but need to be tested more with more ships in game
 
 -score board is done
 
-----------------------------------------REMAINING 
+----------------------------------------REMAINING
 
 - bot player
 
@@ -22,55 +22,28 @@
 
 - test the battle with more ships and different map size
 
-
-
 ======================================================================================
-                                   **REFACTORS :**
+**REFACTORS :**
 
 - every node of linked list now contains user profile's node address (also in printing the list we can see the owner)
 
 ======================================================================================
-                                     **FEATS :**
+**FEATS :**
 
+-----------------------------------BATTLE METHODS :
+- checkMapValid 
+  
+  -checkShipsValid
 
------------------------------------BATTLE ADDED :
+----------------------------------BASE METHODS:
 
-- delShip
-
-- checkFullTermination
-
--shoot
-
--battleBase
-
-----------------------------------BASE METHODS: 
-
-- makeRandomNumber
-
--printScoreBoard
-
--saveScoresInFile
-
--coinCalc
-
+- checkSettingValidation
 
 -----------------------------------SHIP METHODS:
-- printShipDataForUser
-  
-- makeShipsList
-
--drawOrgMap
-
--drawBattleMap
-
--showAroundOfTerminatedShip
-
--makeSeaReady
 
 
 ======================================================================================
 **FIX :**
 
-a lot
-not IMP
+a lot not IMP
 
